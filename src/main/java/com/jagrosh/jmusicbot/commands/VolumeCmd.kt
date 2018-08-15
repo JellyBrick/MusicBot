@@ -40,7 +40,7 @@ class VolumeCmd(bot: Bot) : MusicCommand(bot) {
         if (event.args.isEmpty()) {
             event.reply(FormatUtil.volumeIcon(volume) + " Current volume is `" + volume + "`")
         } else {
-            var nvolume: Int = try {
+            val nvolume: Int = try {
                 Integer.parseInt(event.args)
             } catch (e: NumberFormatException) {
                 -1

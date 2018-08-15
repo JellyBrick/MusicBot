@@ -18,7 +18,6 @@ package com.jagrosh.jmusicbot
 import com.jagrosh.jdautilities.command.CommandClientBuilder
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter
 import com.jagrosh.jdautilities.examples.command.AboutCommand
-import com.jagrosh.jdautilities.examples.command.GuildlistCommand
 import com.jagrosh.jdautilities.examples.command.PingCommand
 import com.jagrosh.jmusicbot.audio.AudioHandler
 import com.jagrosh.jmusicbot.commands.*
@@ -145,13 +144,14 @@ internal object JMusicBot {
         var nogame = false
         if (config.status != OnlineStatus.UNKNOWN)
             cb.setStatus(config.status)
-        if (config.getGame() == null)
-            cb.useDefaultGame()
-        else if (config.getGame()!!.name.equals("none", ignoreCase = true)) {
-            cb.setGame(null)
-            nogame = true
-        } else
-            cb.setGame(config.getGame())
+        when {
+            config.getGame() == null -> cb.useDefaultGame()
+            config.getGame()!!.name.equals("none", ignoreCase = true) -> {
+                cb.setGame(null)
+                nogame = true
+            }
+            else -> cb.setGame(config.getGame())
+        }
         val client = cb.build()
 
         if (!config.noGui) {
